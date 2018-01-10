@@ -1,0 +1,9 @@
+*~
+*.egg-info
+*.gcov
+*.pyc
+*.so
+.gh-pages/
+coverage_*
+build/
+dist/
