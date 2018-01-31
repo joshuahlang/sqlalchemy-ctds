@@ -97,7 +97,7 @@ docker_$(strip $(1))_$(strip $(2)):
 
 .PHONY: test_$(strip $(1))_$(strip $(2))
 test_$(strip $(1))_$(strip $(2)): docker_$(strip $(1))_$(strip $(2)) start-sqlserver
-	docker run --init --rm \
+	docker run --init --rm --tty \
         --network container:$(SQL_SERVER_DOCKER_IMAGE_NAME) \
         $(call UNITTEST_DOCKER_IMAGE_NAME, $(1), $(2)) \
         ./scripts/unittest.sh
