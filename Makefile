@@ -20,7 +20,8 @@ CHECKED_FREETDS_VERSIONS := \
 DEFAULT_PYTHON_VERSION := $(lastword $(SUPPORTED_PYTHON_VERSIONS))
 DEFAULT_FREETDS_VERSION := $(lastword $(CHECKED_FREETDS_VERSIONS))
 
-SQLALCHEMY_CTDS_VERSION := $(strip $(shell python setup.py --version))
+# Ignore warnings, i.e. "Unknown distribution option: 'python_requires'"
+SQLALCHEMY_CTDS_VERSION := $(strip $(shell python -W ignore setup.py --version))
 
 # Help
 .PHONY: help
@@ -63,7 +64,7 @@ clean: stop-sqlserver
 
 .PHONY: publish
 publish:
-	git tag -a v$(CTDS_VERSION) -m "v$(CTDS_VERSION)"
+	git tag -a v$(SQLALCHEMY_CTDS_VERSION) -m "v$(SQLALCHEMY_CTDS_VERSION)"
 	git push --tags
 	python setup.py sdist upload
 
@@ -74,9 +75,7 @@ start-sqlserver:
 
 .PHONY: stop-sqlserver
 stop-sqlserver:
-	if [ `docker ps -f name=$(SQL_SERVER_DOCKER_IMAGE_NAME) -q` ]; then \
-        docker stop $(SQL_SERVER_DOCKER_IMAGE_NAME); \
-    fi
+	scripts/remove-sqlserver.sh $(SQL_SERVER_DOCKER_IMAGE_NAME)
 
 # Function to generate a rules for:
 #   * building a docker image with a specific Python/FreeTDS version

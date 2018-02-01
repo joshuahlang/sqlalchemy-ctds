@@ -80,6 +80,8 @@ setuptools.setup(
         'Topic :: Database :: Front-Ends',
     ],
 
+    python_requires='>=2.6, !=3.0.*, !=3.1.*, !=3.2.*',
+
     packages = setuptools.find_packages('src'),
     package_data = {
         'sqlalchemy_ctds': []
